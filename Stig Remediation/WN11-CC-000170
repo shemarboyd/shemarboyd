@@ -1,0 +1,40 @@
+<#
+.SYNOPSIS
+    This PowerShell script set "Allow Microsoft accounts to be optional" to enabled
+.NOTES
+    Author          : Shemar Boyd
+    LinkedIn        : https://www.linkedin.com/in/shemar-boyd-a23388150/
+    GitHub          : github.com/shemarboyd
+    Date Created    : 2026-03-26
+    Last Modified   : 2026-03-26
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN11-CC-000170
+
+.TESTED ON
+    Date(s) Tested  : 3/27/2026
+    Tested By       : shemarboyd
+    Systems Tested  : Windows 11 vm
+    PowerShell Ver. : 5.1.26100.7920
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+    PS C:\> .\__remediation_template(STIG-ID-WN11-CC-000170).ps1 
+#>
+
+
+$registryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+$valueName = "MSAOptional"
+$valueData = 1
+
+# Create registry path if needed
+if (-not (Test-Path $registryPath)) {
+    New-Item -Path $registryPath -Force | Out-Null
+}
+
+# Set required STIG value
+New-ItemProperty -Path $registryPath -Name $valueName -Value $valueData -PropertyType DWord -Force | Out-Null
+
+Write-Host "WN11-CC-000170 remediated: Microsoft accounts optional for modern apps enabled."
